@@ -141,4 +141,23 @@ router.get('/creator/:creator_id', async (req, res) => {
 	}
 });
 
+// ROUTE          DELETE api/profiles/profile
+// DESCRIPTION    Delete profile, creator & posts
+// ACCESS         Private
+router.delete('/profile', auth, async (req, res) => {
+	try {
+		// @todo - remove users posts
+
+		// Remove profile
+		await Profile.findOneAndRemove({ creator: req.creator.id });
+		// Remove creator
+		await Creator.findOneAndRemove({ _id: req.creator.id });
+
+		res.json({ msg: 'Creator deleted' });
+	} catch (err) {
+		console.error(err.message);
+		res.status(500).send('Server Error');
+	}
+});
+
 module.exports = router;
